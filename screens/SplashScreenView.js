@@ -1,6 +1,6 @@
 import { StyleSheet, View, Image } from "react-native";
 import { StatusBar } from 'expo-status-bar';
-import Icon from "./assets/img/icon.png"
+import Icon from "../assets/img/icon.png"
 
 export default function SplashScreen() {
     return (
