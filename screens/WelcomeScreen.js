@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { ImageBackground, StyleSheet, Text, View, FlatList, TouchableOpacity} from 'react-native';
+import { Image, StyleSheet, Text, View, FlatList, TouchableOpacity, Button} from 'react-native';
 import Card from "../components/Card"
 import Waves from "../assets/img/bgwaves.png"
 
@@ -14,11 +14,11 @@ const DATA = [
   { id: '6', title: 'Crypto', icon: require('../assets/img/crypto.png') },
 ];
 
-export default function WelcomeScreen() {
+export default function WelcomeScreen({navigation}) {
   const renderItem = ({ item, index }) => {
     const cardStyle = item.id === '1' ? styles.specialCard : {}; 
     const iconStyle = item.id === '1' ? styles.specialIcon : {}; 
-    const columnStyle = index % 2 === 1 && item.id === '2'  ? styles.secondColumn : {}; 
+    const columnStyle = index % 2 === 1 && item.id === '1'  ? styles.secondColumn : {}; 
     return (
       <Card title={item.title} icon={item.icon} style={[cardStyle, columnStyle]} iconStyle={iconStyle} />
     );
@@ -33,17 +33,22 @@ export default function WelcomeScreen() {
           numColumns={2}
           contentContainerStyle={styles.list}
         />
-      <ImageBackground source={Waves} style={styles.imageBackground} resizeMode="cover">
         <View style={styles.bottom}>
-          <TouchableOpacity style={styles.signInButton}>
+          <TouchableOpacity 
+            onPress={() => navigation.navigate('SignIn')}  
+            style={styles.signInButton}
+          >
             <Text style={styles.signInText}>Sign In</Text>
           </TouchableOpacity>
           <Separator />
-          <TouchableOpacity style={styles.signUpButton}>
+          <TouchableOpacity 
+            onPress={() => navigation.navigate('SignUp')}  
+            style={styles.signUpButton}
+          >
             <Text style={styles.signUpText}>Sign up</Text>
           </TouchableOpacity>
+          <Image source = {Waves} style = {styles.imageBackground}/>
         </View>
-      </ImageBackground>
         <StatusBar style="auto" />
     </View>
   );
@@ -53,22 +58,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f2f3f5',
-    paddingTop: 50
+    paddingTop: 50,
+    position: 'relative'
   },
   list: {
-    alignItems: 'center',
-    zIndex: 1
+    alignItems: 'center'
   },
   bottom: {
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 1
+    position: 'relative',
   },
   signInButton: {
     alignItems: 'center',
     justifyContent: 'center',
     height: 25,
     backgroundColor: 'transparent',
+
   },
   signInText: {
     color: '#FA8A34',
@@ -83,7 +89,7 @@ const styles = StyleSheet.create({
     radius: 16,
     backgroundColor: '#FA8A34',
     marginBottom: 24,
-    borderRadius: 16
+    borderRadius: 16,
   },
   signUpText: {
     color: 'white',

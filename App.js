@@ -6,6 +6,8 @@ import Animated, {Easing, useSharedValue, useAnimatedStyle, withTiming, runOnJS}
 
 import SplashScreen from './screens/SplashScreenView';
 import WelcomeScreen from "./screens/WelcomeScreen";
+import SignInScreen from './screens/SignInScreen';
+import SignUpScreen from './screens/SignUpScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -39,8 +41,10 @@ export default function App() {
           <SplashScreen />
         </Animated.View>
       ) : (
-        <Stack.Navigator>
-          <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
+        <Stack.Navigator initialRouteName='Welcome'>
+          <Stack.Screen name='Welcome' component={WelcomeScreen} options={{ headerShown: false }} />
+          <Stack.Screen name='SignUp' component={SignUpScreen} options={{ headerShown: false }} />
+          <Stack.Screen name='SignIn' component={SignInScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
       )}
     </NavigationContainer>
