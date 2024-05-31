@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     fontWeight: '600'
   },
   separator: {
-    marginVertical: 20,
+    marginVertical: 10,
   },
   specialCard: {
     backgroundColor: '#FA8A34',
