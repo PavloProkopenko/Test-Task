@@ -1,9 +1,10 @@
 import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
-import { store, persistor } from './redux/store';
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { store, persistor } from "./redux/store";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState, useEffect } from "react";
 import Animated, {
   Easing,
@@ -18,6 +19,7 @@ import WelcomeScreen from "./screens/WelcomeScreen";
 import SignInScreen from "./screens/SignInScreen";
 import SignUpScreen from "./screens/SignUpScreen";
 import PinCodeScreen from "./screens/PinCodeScreen";
+import HomeScreen from "./screens/HomeScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -35,6 +37,8 @@ export default function App() {
         setIsLoggedIn(false);
       }
     };
+
+    checkLoginStatus();
 
     setTimeout(() => {
       opacity.value = withTiming(
@@ -59,53 +63,57 @@ export default function App() {
   });
 
   return (
-    <NavigationContainer>
-      {isShowSplash ? (
-        <Animated.View style={[styles.container, animatedStyle]}>
-          <SplashScreen />
-        </Animated.View>
-      ) : (
-        <Stack.Navigator initialRouteName="Welcome">
-          {isLoggedIn ? (
-            <>
-              <Stack.Screen
-                name="PinCode"
-                component={PinCodeScreen}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Home"
-                component={HomeScreen}
-                options={{ headerShown: false }}
-              />
-            </>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <NavigationContainer>
+          {isShowSplash ? (
+            <Animated.View style={[styles.container, animatedStyle]}>
+              <SplashScreen />
+            </Animated.View>
           ) : (
-            <>
-              <Stack.Screen
-                name="Welcome"
-                component={WelcomeScreen}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="SignIn"
-                component={SignInScreen}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="SignUp"
-                component={SignUpScreen}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="PinCode"
-                component={PinCodeScreen}
-                options={{ headerShown: false }}
-              />
-            </>
+            <Stack.Navigator initialRouteName="Welcome">
+              {isLoggedIn ? (
+                <>
+                  <Stack.Screen
+                    name="PinCode"
+                    component={PinCodeScreen}
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="Home"
+                    component={HomeScreen}
+                    options={{ headerShown: false }}
+                  />
+                </>
+              ) : (
+                <>
+                  <Stack.Screen
+                    name="Welcome"
+                    component={WelcomeScreen}
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="SignIn"
+                    component={SignInScreen}
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="SignUp"
+                    component={SignUpScreen}
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="PinCode"
+                    component={PinCodeScreen}
+                    options={{ headerShown: false }}
+                  />
+                </>
+              )}
+            </Stack.Navigator>
           )}
-        </Stack.Navigator>
-      )}
-    </NavigationContainer>
+        </NavigationContainer>
+      </PersistGate>
+    </Provider>
   );
 }
 
