@@ -8,6 +8,8 @@ import {
   TextInput,
   ScrollView,
 } from "react-native";
+import { useDispatch } from "react-redux";
+import { setToken, setPin } from "../redux/reducers/authReducer";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -24,12 +26,13 @@ const SignInScreen = ({ navigation }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const handleLogin = async () => {
     try {
       setLoading(true);
 
-      console.log('Sending request with:', {
+      console.log("Sending request with:", {
         username: username,
         password: password,
       });
@@ -40,11 +43,15 @@ const SignInScreen = ({ navigation }) => {
       });
       console.log(response.data);
 
-      await AsyncStorage.setItem("userToken", response.data.token);
+      dispatch(setToken(response.data.token));
       setLoading(false);
-      setError(false);
+
+      navigation.navigate("PinCode");
     } catch (error) {
-      console.error('Login error:', error.response ? error.response.data : error.message);
+      console.error(
+        "Login error:",
+        error.response ? error.response.data : error.message
+      );
       setLoading(false);
       setError(true);
     }
