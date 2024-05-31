@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StatusBar } from "expo-status-bar";
 
 import Back from "../assets/img/back_arrow.png";
 import PhoneIcon from "../assets/img/phone.png";
@@ -11,17 +12,25 @@ const Line = () => <View style={styles.line} />;
 
 const PinCodeScreen = ({ navigation }) => {
   const [pin, setPin] = useState("");
-  const [userEmail, setUserEmail] = useState("");
+  const [userName, setUsername] = useState("");
   const [isFirstTime, setIsFirstTime] = useState(true);
 
   useEffect(() => {
     const checkUser = async () => {
-      const storedEmail = await AsyncStorage.getItem("userEmail");
-      if (storedEmail) {
-        setUserEmail(storedEmail);
-        setIsFirstTime(false);
-      } else {
-        setIsFirstTime(true);
+      try {
+        const storedName = await AsyncStorage.getItem("username");
+        console.log("Stored username:", storedName);
+        const storedPin = await AsyncStorage.getItem("userPin");
+        console.log("Stored PIN:", storedPin);
+
+        if (storedName !== null && storedPin !== null) {
+          setUsername(storedName);
+          setIsFirstTime(false);
+        } else {
+          setIsFirstTime(true);
+        }
+      } catch (error) {
+        console.error("Failed to load data from AsyncStorage:", error);
       }
     };
 
@@ -29,7 +38,7 @@ const PinCodeScreen = ({ navigation }) => {
   }, []);
 
   const handlePinPress = (value) => {
-    if (pin.length < 5) {
+    if (pin.length < 4) {
       setPin((prevPin) => prevPin + value);
     }
   };
@@ -48,6 +57,7 @@ const PinCodeScreen = ({ navigation }) => {
         navigation.navigate("Home");
       } else {
         // TODO: handle invalid PIN
+        Alert.alert("Invalid PIN", "The PIN you entered is incorrect.");
       }
     }
   };
@@ -56,8 +66,19 @@ const PinCodeScreen = ({ navigation }) => {
     navigation.navigate("SignIn");
   };
 
+  // const clearAsyncStorage = async () => {
+  //   try {
+  //     await AsyncStorage.clear();
+  //     console.log("AsyncStorage has been cleared.");
+  //     setUsername("");
+  //     setIsFirstTime(true);
+  //   } catch (error) {
+  //     console.error("Failed to clear AsyncStorage:", error);
+  //   }
+  // };
+
   const renderCircles = () => {
-    return Array(5)
+    return Array(4)
       .fill(0)
       .map((_, index) => (
         <View
@@ -69,20 +90,23 @@ const PinCodeScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.goBack()} style = {styles.backButton}>
+      <TouchableOpacity
+        onPress={() => navigation.goBack()}
+        style={styles.backButton}
+      >
         <Image source={Back} style={styles.backArrow} />
       </TouchableOpacity>
       {isFirstTime ? (
         <>
           <Image source={PhoneIcon} style={styles.icon} />
           <Text style={styles.title}>Create a Pin code</Text>
-          <Text style={styles.subtitle}>enter 5 digit code:</Text>
+          <Text style={styles.subtitle}>enter 4 digit code:</Text>
         </>
       ) : (
         <>
           <Image source={User} style={styles.icon} />
           <Text style={styles.title}>Enter your PIN</Text>
-          <Text style={styles.subtitle}>{userEmail}</Text>
+          <Text style={styles.subtitle}>{userName}</Text>
           <TouchableOpacity onPress={handleChangeAccount}>
             <Text style={styles.changeAccountText}>Change account</Text>
           </TouchableOpacity>
@@ -116,6 +140,10 @@ const PinCodeScreen = ({ navigation }) => {
       >
         <Text style={styles.continueButtonText}>Continue</Text>
       </TouchableOpacity>
+      {/*<TouchableOpacity onPress={clearAsyncStorage}>
+        <Text >Clear AsyncStorage</Text>
+      </TouchableOpacity> */}
+      <StatusBar style="auto" />
     </View>
   );
 };
@@ -135,14 +163,13 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 15,
-    fontWeight: "400",
-    color: "#606773",
-    marginBottom: 20,
+    fontWeight: "500",
+    color: "#06070A",
   },
   changeAccountText: {
-    fontSize: 16,
+    fontSize: 15,
     color: "#FA8A34",
-    marginBottom: 20,
+    fontWeight: '400'
   },
   circlesContainer: {
     flexDirection: "row",
@@ -213,8 +240,8 @@ const styles = StyleSheet.create({
     width: 24,
   },
   backButton: {
-    position: 'absolute',
-    left: 20
+    position: "absolute",
+    left: 20,
   },
 });
 

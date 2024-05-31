@@ -28,9 +28,11 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const opacity = useSharedValue(1);
 
+  
   useEffect(() => {
     const checkLoginStatus = async () => {
       const userToken = await AsyncStorage.getItem("userToken");
+      console.log("User Token: ",userToken);
       if (userToken) {
         setIsLoggedIn(true);
       } else {
@@ -105,6 +107,11 @@ export default function App() {
                   <Stack.Screen
                     name="PinCode"
                     component={PinCodeScreen}
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="Home"
+                    component={HomeScreen}
                     options={{ headerShown: false }}
                   />
                 </>

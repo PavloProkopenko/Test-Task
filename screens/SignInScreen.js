@@ -9,9 +9,9 @@ import {
   ScrollView,
 } from "react-native";
 import { useDispatch } from "react-redux";
-import { setToken, setPin } from "../redux/reducers/authReducer";
-import axios from "axios";
+import { setToken } from "../redux/reducers/authReducer";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 import Back from "../assets/img/back_arrow.png";
 import User from "../assets/img/exist_user.png";
@@ -21,7 +21,7 @@ import ErrorIcon from "../assets/img/error_icon.png";
 const Line = () => <View style={styles.line} />;
 
 const SignInScreen = ({ navigation }) => {
-  const [username, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(false);
@@ -44,6 +44,7 @@ const SignInScreen = ({ navigation }) => {
       console.log(response.data);
 
       dispatch(setToken(response.data.token));
+      
       setLoading(false);
 
       navigation.navigate("PinCode");
@@ -82,7 +83,7 @@ const SignInScreen = ({ navigation }) => {
             <TextInput
               style={styles.input}
               placeholder="Username"
-              onChangeText={setEmail}
+              onChangeText={setUsername}
               value={username}
             />
             {error && <Image source={ErrorIcon} style={styles.errorIcon} />}
