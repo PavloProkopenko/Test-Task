@@ -1,0 +1,11 @@
+import axios from "axios";
+
+const axios_api = axios.create({
+    baseURL: "https://dummyjson.com",
+    timeout: 1000,
+    headers: {
+        "Content-Type": 'application/json'
+    }
+});
+
+export default axios_api;
