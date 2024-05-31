@@ -9,6 +9,7 @@ import {
   ScrollView,
 } from "react-native";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import Back from "../assets/img/back_arrow.png";
 import User from "../assets/img/exist_user.png";
@@ -18,7 +19,7 @@ import ErrorIcon from "../assets/img/error_icon.png";
 const Line = () => <View style={styles.line} />;
 
 const SignInScreen = ({ navigation }) => {
-  const [email, setEmail] = useState("");
+  const [username, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(false);
@@ -27,18 +28,23 @@ const SignInScreen = ({ navigation }) => {
   const handleLogin = async () => {
     try {
       setLoading(true);
-      const response = await axios
-        .post("https://dummyjson.com/auth/login", {
-          username: email,
-          password: password,
-        })
-        .then((res) => res.json())
-        .then(console.log);
+
+      console.log('Sending request with:', {
+        username: username,
+        password: password,
+      });
+
+      const response = await axios.post("https://dummyjson.com/auth/login", {
+        username: username,
+        password: password,
+      });
       console.log(response.data);
+
+      await AsyncStorage.setItem("userToken", response.data.token);
       setLoading(false);
       setError(false);
     } catch (error) {
-      console.error(error);
+      console.error('Login error:', error.response ? error.response.data : error.message);
       setLoading(false);
       setError(true);
     }
@@ -64,13 +70,13 @@ const SignInScreen = ({ navigation }) => {
               Error: Invalid E-mail or Password
             </Text>
           )}
-          <Text style={styles.label}>Email</Text>
+          <Text style={styles.label}>Username</Text>
           <View style={[styles.inputContainer, error && styles.errorBorder]}>
             <TextInput
               style={styles.input}
-              placeholder="Email"
+              placeholder="Username"
               onChangeText={setEmail}
-              value={email}
+              value={username}
             />
             {error && <Image source={ErrorIcon} style={styles.errorIcon} />}
           </View>
