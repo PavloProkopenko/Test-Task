@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, Image, TouchableOpacity, Text, TextInput, ScrollView } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 
 import Back from '../assets/img/back_arrow.png';
 import User from '../assets/img/createUser.png';
+import EyeIcon from '../assets/img/eye_icon.png';
 
 const Line = () => <View style={styles.line} />;
 
 const SignUpScreen = ({ navigation }) => {
   const { control, handleSubmit, formState: { errors } } = useForm();
+  const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit = data => {
     console.log(data);
@@ -78,36 +80,41 @@ const SignUpScreen = ({ navigation }) => {
           {errors.email && <Text style={styles.errorText}>{errors.email.message}</Text>}
 
           <Text style={styles.label}>Password</Text>
-          <Controller
-            control={control}
-            rules={{
-              required: 'Password is required',
-              minLength: {
-                value: 8,
-                message: 'Password must be at least 8 characters long',
-              },
-              maxLength: {
-                value: 64,
-                message: 'Password cannot exceed 64 characters',
-              },
-              pattern: {
-                value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,64}$/,
-                message: 'Password must contain upper and lower case letters, a number, and a special character',
-              },
-            }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={styles.input}
-                placeholder="Password"
-                secureTextEntry
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
-            name="password"
-            defaultValue=""
-          />
+          <View style={styles.passwordContainer}>
+            <Controller
+              control={control}
+              rules={{
+                required: 'Password is required',
+                minLength: {
+                  value: 8,
+                  message: 'Password must be at least 8 characters long',
+                },
+                maxLength: {
+                  value: 64,
+                  message: 'Password cannot exceed 64 characters',
+                },
+                pattern: {
+                  value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,64}$/,
+                  message: 'Password must contain upper and lower case letters, a number, and a special character',
+                },
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  style={ { flex: 1 }}
+                  placeholder="Password"
+                  secureTextEntry={!showPassword}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
+              name="password"
+              defaultValue=""
+            />
+            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+              <Image source={EyeIcon} style={styles.eyeIcon} />
+            </TouchableOpacity>
+          </View>
           {errors.password && <Text style={styles.errorText}>{errors.password.message}</Text>}
         </ScrollView>
         <View style={styles.buttonContainer}>
@@ -177,6 +184,20 @@ const styles = StyleSheet.create({
     padding: 16,
     marginVertical: 5,
   },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#CED5E0',
+    borderRadius: 16,
+    marginVertical: 5,
+    paddingHorizontal: 16,
+    height: 56,
+  },
+  eyeIcon: {
+    width: 18,
+    height: 12,
+  },
   buttonContainer: {
     paddingHorizontal: 16,
     paddingBottom: 16,
@@ -204,7 +225,6 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: '#606773',
     marginLeft: 16,
-    marginVertical: 8,
   },
 });
 
