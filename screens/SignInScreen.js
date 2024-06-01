@@ -44,6 +44,7 @@ const SignInScreen = ({ navigation }) => {
       console.log(response.data);
 
       dispatch(setToken(response.data.token));
+      await AsyncStorage.setItem("userToken", response.data.token);
       
       setLoading(false);
 
