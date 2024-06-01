@@ -9,17 +9,36 @@ import {
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import { useState, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import Arrow from "../assets/img/orange_arrow.png";
+import CardIcon1 from "../assets/img/card_icon_1.png";
+import CardIcon2 from "../assets/img/card_icon_2.png";
 
 const Tab = createBottomTabNavigator();
 
 const Home = () => {
+  const [userName, setUsername] = useState("");
+
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const storedName = await AsyncStorage.getItem("username");
+        console.log("Stored username:", storedName);
+        setUsername(storedName);
+      } catch (error) {
+        console.error("Failed to load data from AsyncStorage:", error);
+      }
+    };
+
+    checkUser();
+  }, []);
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>Your name</Text>
-        <Text style={styles.userName}>Jhon doe</Text>
+        <Text style={styles.userName}>{userName}</Text>
       </View>
       <View style={styles.card}>
         <Text style={styles.cardTitle}>Test task</Text>
@@ -32,37 +51,29 @@ const Home = () => {
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>Before you Start</Text>
       </View>
-      <ScrollView horizontal = {true} style={styles.cardContainer}>
-        <View style={styles.smallCard}>
-          <Text style={styles.cardTitle}>Lorem ipsum</Text>
-          <Text style={styles.cardSubtitle}>lorem ipsum</Text>
-          <Text style={styles.cardSteps}>2 steps</Text>
+      <ScrollView horizontal={true}  style={styles.cardContainer}>
+        <View style={styles.smallCard1}>
+          <Image source={CardIcon1} style = {styles.icon} />
+          <View style = {{flexDirection: 'column', marginLeft: 8}} >
+            <Text style={styles.cardTitle}>Lorem ipsum</Text>
+            <Text style={styles.cardSubtitle}>lorem ipsum</Text>
+          </View>
+          <Text style={styles.cardSteps1}>2 steps</Text>
         </View>
-        <View style={styles.smallCard}>
-          <Text style={styles.cardTitle}>Lorem ipsum</Text>
-          <Text style={styles.cardSubtitle}>lorem ipsum</Text>
-          <Text style={styles.cardSteps}>3 steps</Text>
+        <View style={styles.smallCard2}>
+        <Image source={CardIcon2} style = {styles.icon} />
+          <View style = {{flexDirection: 'column', marginLeft: 8}} >
+            <Text style={styles.cardTitle}>Lorem ipsum</Text>
+            <Text style={styles.cardSubtitle}>lorem ipsum</Text>
+          </View>
+          <Text style={styles.cardSteps2}>3 steps</Text>
         </View>
       </ScrollView>
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>Posts</Text>
       </View>
       <View style={styles.postContainer}>
-      <View style={styles.smallCard}>
-          <Text style={styles.cardTitle}>Lorem ipsum</Text>
-          <Text style={styles.cardSubtitle}>lorem ipsum</Text>
-          <Text style={styles.cardSteps}>3 steps</Text>
-        </View>
-        <View style={styles.smallCard}>
-          <Text style={styles.cardTitle}>Lorem ipsum</Text>
-          <Text style={styles.cardSubtitle}>lorem ipsum</Text>
-          <Text style={styles.cardSteps}>3 steps</Text>
-        </View>
-        <View style={styles.smallCard}>
-          <Text style={styles.cardTitle}>Lorem ipsum</Text>
-          <Text style={styles.cardSubtitle}>lorem ipsum</Text>
-          <Text style={styles.cardSteps}>3 steps</Text>
-        </View>
+        
       </View>
     </ScrollView>
   );
@@ -161,6 +172,10 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
   },
+  icon: {
+    height: 48,
+    width: 48
+  },
   card: {
     backgroundColor: "white",
     borderRadius: 16,
@@ -169,11 +184,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   cardTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: 15,
+    fontWeight: '500',
+    color: "white",
   },
   cardSubtitle: {
-    color: "#606773",
+    color: "white",
     marginVertical: 5,
   },
   cardButton: {
@@ -201,18 +217,40 @@ const styles = StyleSheet.create({
     marginTop: 32,
   },
   cardContainer: {
-    marginHorizontal: 20,
+    height: 350,
+    marginLeft: 20,
   },
-  smallCard: {
-    backgroundColor: "white",
+  smallCard1: {
+    flexDirection: 'row',
+    backgroundColor: "#636363",
+    color: 'white',
+    borderRadius: 16,
+    padding: 20,
+    flex: 1,
+    width: 250,
+  },
+  smallCard2: {
+    flexDirection: 'row',
+    backgroundColor: "#EE6363",
     borderRadius: 16,
     padding: 20,
     flex: 1,
     marginHorizontal: 5,
+    width: 250,
   },
-  cardSteps: {
+  cardSteps1: {
+    position: 'absolute',
+    top: 80,
+    left: 20,
     marginTop: 10,
-    color: "#FA8A34",
+    color: "#ffffff",
+  },
+  cardSteps2: {
+    position: 'absolute',
+    top: 80,
+    left: 20,
+    marginTop: 10,
+    color: "#606773",
   },
   postContainer: {
     marginHorizontal: 20,
