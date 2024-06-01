@@ -20,6 +20,7 @@ import SignInScreen from "./screens/SignInScreen";
 import SignUpScreen from "./screens/SignUpScreen";
 import PinCodeScreen from "./screens/PinCodeScreen";
 import HomeScreen from "./screens/HomeScreen";
+import ProfileScreen from "./screens/SettingsScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -28,11 +29,10 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const opacity = useSharedValue(1);
 
-  
   useEffect(() => {
     const checkLoginStatus = async () => {
       const userToken = await AsyncStorage.getItem("userToken");
-      console.log("User Token: ",userToken);
+      console.log("User Token: ", userToken);
       if (userToken) {
         setIsLoggedIn(true);
       } else {

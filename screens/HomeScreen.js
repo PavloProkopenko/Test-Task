@@ -17,8 +17,8 @@ import Arrow from "../assets/img/orange_arrow.png";
 import CardIcon1 from "../assets/img/card_icon_1.png";
 import CardIcon2 from "../assets/img/card_icon_2.png";
 
-import Profile from "../screens/SettingsScreen";
-import Search from "../screens/SearchScreen";
+import ProfileScreen from "./SettingsScreen";
+import SearchScreen from "./SearchScreen"
 
 const Tab = createBottomTabNavigator();
 
@@ -111,6 +111,7 @@ const Portfolio = () => (
   </View>
 );
 
+
 const HomeScreen = () => {
   return (
     <NavigationContainer independent={true}>
@@ -148,12 +149,12 @@ const HomeScreen = () => {
         />
         <Tab.Screen
           name="Search"
-          component={Search}
+          component={SearchScreen}
           options={{ headerShown: false }}
         />
         <Tab.Screen
           name="Profile"
-          component={Profile}
+          component={ProfileScreen}
           options={{ headerShown: false }}
         />
       </Tab.Navigator>

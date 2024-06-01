@@ -45,7 +45,8 @@ const SignInScreen = ({ navigation }) => {
 
       dispatch(setToken(response.data.token));
       await AsyncStorage.setItem("userToken", response.data.token);
-      
+      await AsyncStorage.setItem("username", response.data.username);
+
       setLoading(false);
 
       navigation.navigate("PinCode");
