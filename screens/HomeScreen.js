@@ -11,6 +11,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 import Arrow from "../assets/img/orange_arrow.png";
 import CardIcon1 from "../assets/img/card_icon_1.png";
@@ -20,6 +21,8 @@ const Tab = createBottomTabNavigator();
 
 const Home = () => {
   const [userName, setUsername] = useState("");
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const checkUser = async () => {
@@ -32,8 +35,21 @@ const Home = () => {
       }
     };
 
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get("https://jsonplaceholder.typicode.com/posts?_limit=3");
+        setPosts(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+        setLoading(false);
+      }
+    };
+
     checkUser();
+    fetchPosts();
   }, []);
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
@@ -41,8 +57,8 @@ const Home = () => {
         <Text style={styles.userName}>{userName}</Text>
       </View>
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>Test task</Text>
-        <Text style={styles.cardSubtitle}>Lorem ipsum</Text>
+        <Text style={styles.cardTitleHeader}>Test task</Text>
+        <Text style={styles.cardSubtitleHeader}>Lorem ipsum</Text>
         <TouchableOpacity style={styles.cardButton}>
           <Text style={styles.cardButtonText}>Go to call</Text>
           <Image source={Arrow} style={styles.arrowImage} />
@@ -73,7 +89,12 @@ const Home = () => {
         <Text style={styles.sectionTitle}>Posts</Text>
       </View>
       <View style={styles.postContainer}>
-        
+      {posts.map((post) => (
+          <View key={post.id} style={styles.postCard}>
+            <Text style={styles.postTitle}>{post.title}</Text>
+            <Text style={styles.postContent}>{post.body}</Text>
+          </View>
+        ))}
       </View>
     </ScrollView>
   );
@@ -159,7 +180,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderBottomLeftRadius: 25,
     borderBottomRightRadius: 25,
-    height: "30%",
+    height: "20%",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -182,11 +203,21 @@ const styles = StyleSheet.create({
     padding: 20,
     marginVertical: 10,
     marginHorizontal: 20,
+    height: 144
+  },
+  cardTitleHeader: {
+    fontSize: 15,
+    fontWeight: '500',
+    color: "#06070A",
   },
   cardTitle: {
     fontSize: 15,
     fontWeight: '500',
     color: "white",
+  },
+  cardSubtitleHeader: {
+    color: "#858C94",
+    marginVertical: 5,
   },
   cardSubtitle: {
     color: "white",
@@ -217,7 +248,7 @@ const styles = StyleSheet.create({
     marginTop: 32,
   },
   cardContainer: {
-    height: 350,
+    height: 300,
     marginLeft: 20,
   },
   smallCard1: {
@@ -228,6 +259,7 @@ const styles = StyleSheet.create({
     padding: 20,
     flex: 1,
     width: 250,
+    height: 150,
   },
   smallCard2: {
     flexDirection: 'row',
@@ -237,6 +269,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 5,
     width: 250,
+    height: 150,
   },
   cardSteps1: {
     position: 'absolute',
