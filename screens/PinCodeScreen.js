@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StatusBar } from "expo-status-bar";
+import * as LocalAuthentication from 'expo-local-authentication';
 
 import Back from "../assets/img/back_arrow.png";
 import PhoneIcon from "../assets/img/phone.png";
@@ -26,6 +27,7 @@ const PinCodeScreen = ({ navigation }) => {
         if (storedName !== null && storedPin !== null) {
           setUsername(storedName);
           setIsFirstTime(false);
+          promptBiometricAuth();
         } else {
           setIsFirstTime(true);
         }
@@ -58,6 +60,23 @@ const PinCodeScreen = ({ navigation }) => {
       } else {
         // TODO: handle invalid PIN
         Alert.alert("Invalid PIN", "The PIN you entered is incorrect.");
+      }
+    }
+  };
+
+  const promptBiometricAuth = async () => {
+    const hasHardware = await LocalAuthentication.hasHardwareAsync();
+    const supportedAuthTypes = await LocalAuthentication.supportedAuthenticationTypesAsync();
+    const isEnrolled = await LocalAuthentication.isEnrolledAsync();
+
+    if (hasHardware && isEnrolled && supportedAuthTypes.length > 0) {
+      const result = await LocalAuthentication.authenticateAsync({
+        promptMessage: "Authenticate to unlock",
+        fallbackLabel: "Use PIN"
+      });
+
+      if (result.success) {
+        navigation.navigate("Home");
       }
     }
   };

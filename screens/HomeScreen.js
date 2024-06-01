@@ -17,6 +17,9 @@ import Arrow from "../assets/img/orange_arrow.png";
 import CardIcon1 from "../assets/img/card_icon_1.png";
 import CardIcon2 from "../assets/img/card_icon_2.png";
 
+import Profile from "../screens/SettingsScreen";
+import Search from "../screens/SearchScreen";
+
 const Tab = createBottomTabNavigator();
 
 const Home = () => {
@@ -37,7 +40,9 @@ const Home = () => {
 
     const fetchPosts = async () => {
       try {
-        const response = await axios.get("https://jsonplaceholder.typicode.com/posts?_limit=3");
+        const response = await axios.get(
+          "https://jsonplaceholder.typicode.com/posts?_limit=3"
+        );
         setPosts(response.data);
         setLoading(false);
       } catch (error) {
@@ -67,18 +72,18 @@ const Home = () => {
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>Before you Start</Text>
       </View>
-      <ScrollView horizontal={true}  style={styles.cardContainer}>
+      <ScrollView horizontal={true} style={styles.cardContainer}>
         <View style={styles.smallCard1}>
-          <Image source={CardIcon1} style = {styles.icon} />
-          <View style = {{flexDirection: 'column', marginLeft: 8}} >
+          <Image source={CardIcon1} style={styles.icon} />
+          <View style={{ flexDirection: "column", marginLeft: 8 }}>
             <Text style={styles.cardTitle}>Lorem ipsum</Text>
             <Text style={styles.cardSubtitle}>lorem ipsum</Text>
           </View>
           <Text style={styles.cardSteps1}>2 steps</Text>
         </View>
         <View style={styles.smallCard2}>
-        <Image source={CardIcon2} style = {styles.icon} />
-          <View style = {{flexDirection: 'column', marginLeft: 8}} >
+          <Image source={CardIcon2} style={styles.icon} />
+          <View style={{ flexDirection: "column", marginLeft: 8 }}>
             <Text style={styles.cardTitle}>Lorem ipsum</Text>
             <Text style={styles.cardSubtitle}>lorem ipsum</Text>
           </View>
@@ -89,7 +94,7 @@ const Home = () => {
         <Text style={styles.sectionTitle}>Posts</Text>
       </View>
       <View style={styles.postContainer}>
-      {posts.map((post) => (
+        {posts.map((post) => (
           <View key={post.id} style={styles.postCard}>
             <Text style={styles.postTitle}>{post.title}</Text>
             <Text style={styles.postContent}>{post.body}</Text>
@@ -103,16 +108,6 @@ const Home = () => {
 const Portfolio = () => (
   <View style={styles.center}>
     <Text>Portfolio</Text>
-  </View>
-);
-const Search = () => (
-  <View style={styles.center}>
-    <Text>Search</Text>
-  </View>
-);
-const Profile = () => (
-  <View style={styles.center}>
-    <Text>Profile</Text>
   </View>
 );
 
@@ -195,7 +190,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     height: 48,
-    width: 48
+    width: 48,
   },
   card: {
     backgroundColor: "white",
@@ -203,16 +198,16 @@ const styles = StyleSheet.create({
     padding: 20,
     marginVertical: 10,
     marginHorizontal: 20,
-    height: 144
+    height: 144,
   },
   cardTitleHeader: {
     fontSize: 15,
-    fontWeight: '500',
+    fontWeight: "500",
     color: "#06070A",
   },
   cardTitle: {
     fontSize: 15,
-    fontWeight: '500',
+    fontWeight: "500",
     color: "white",
   },
   cardSubtitleHeader: {
@@ -252,9 +247,9 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   smallCard1: {
-    flexDirection: 'row',
+    flexDirection: "row",
     backgroundColor: "#636363",
-    color: 'white',
+    color: "white",
     borderRadius: 16,
     padding: 20,
     flex: 1,
@@ -262,7 +257,7 @@ const styles = StyleSheet.create({
     height: 150,
   },
   smallCard2: {
-    flexDirection: 'row',
+    flexDirection: "row",
     backgroundColor: "#EE6363",
     borderRadius: 16,
     padding: 20,
@@ -272,14 +267,14 @@ const styles = StyleSheet.create({
     height: 150,
   },
   cardSteps1: {
-    position: 'absolute',
+    position: "absolute",
     top: 80,
     left: 20,
     marginTop: 10,
     color: "#ffffff",
   },
   cardSteps2: {
-    position: 'absolute',
+    position: "absolute",
     top: 80,
     left: 20,
     marginTop: 10,

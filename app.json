@@ -7,7 +7,10 @@
     "icon": "./assets/img/icon.png",
     "userInterfaceStyle": "light",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSFaceIDUsageDescription": "This app uses Face ID and Touch Id to verify user's identify and protect information "
+      } 
     },
     "android": {
       "adaptiveIcon": {

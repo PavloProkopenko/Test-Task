@@ -1,10 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function Profile() {
+export default function Search() {
   return (
     <View style={styles.container}>
-      <Text>PROFILE SCREEN</Text>
+      <Text>Search SCREEN</Text>
       <StatusBar style="auto" />
     </View>
   );
