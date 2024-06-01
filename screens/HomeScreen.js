@@ -7,6 +7,7 @@ import {
   Image,
 } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { useState, useEffect } from "react";
@@ -19,8 +20,10 @@ import CardIcon2 from "../assets/img/card_icon_2.png";
 
 import ProfileScreen from "./SettingsScreen";
 import SearchScreen from "./SearchScreen"
+import LanguageScreen from "./LanguagesScreen";
 
 const Tab = createBottomTabNavigator();
+const HomeStack = createNativeStackNavigator();
 
 const Home = () => {
   const [userName, setUsername] = useState("");
@@ -112,7 +115,7 @@ const Portfolio = () => (
 );
 
 
-const HomeScreen = () => {
+const HomeTabs = () => {
   return (
     <NavigationContainer independent={true}>
       <Tab.Navigator
@@ -161,6 +164,21 @@ const HomeScreen = () => {
     </NavigationContainer>
   );
 };
+
+const HomeScreen = () => (
+  <HomeStack.Navigator>
+    <HomeStack.Screen
+      name="HomeTabs"
+      component={HomeTabs}
+      options={{ headerShown: false }}
+    />
+    <HomeStack.Screen
+      name="Language"
+      component={LanguageScreen}
+      options={{ headerShown: false }}
+    />
+  </HomeStack.Navigator>
+);
 
 const styles = StyleSheet.create({
   container: {

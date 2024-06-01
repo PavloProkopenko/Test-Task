@@ -8,12 +8,17 @@ import {
   Alert,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNavigation, CommonActions } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
 
 import Back from "../assets/img/back_arrow.png"; 
 import UserIcon from "../assets/img/exist_user.png"; 
 import LanguageIcon from "../assets/img/language_icon.png"; 
 import LogoutIcon from "../assets/img/logout_icon.png"; 
+
+import SignInScreen from "./SignInScreen";
+import LanguageScreen from "./LanguagesScreen";
 
 
 const ProfileScreen = () => {
@@ -31,7 +36,11 @@ const ProfileScreen = () => {
 
   const handleLogout = async () => {
     await AsyncStorage.clear();
-    navigation.navigate("SignIn")
+    dispatch(resetToken());
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Welcome' }],
+    });
   };
 
   return (
